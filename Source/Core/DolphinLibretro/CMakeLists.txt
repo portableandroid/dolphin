@@ -25,7 +25,9 @@ if(ANDROID)
    target_sources(dolphin_libretro PRIVATE
      ../../Android/jni/AndroidCommon/IDCache.cpp
    )
-   set_target_properties(dolphin_libretro PROPERTIES SUFFIX "_android.so")
+   if(NOT PORTANDROID)
+      set_target_properties(dolphin_libretro PROPERTIES SUFFIX "_android.so")
+   endif()
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
@@ -71,5 +73,15 @@ else()
 				uicommon
 				${LIBS}
 		 )
+
+        if(PORTANDROID)
+           set(distribution_DIR ${CFG_LIBS_DIR})
+           set_target_properties(dolphin_libretro PROPERTIES OUTPUT_NAME "core_${CFG_MODULE_NAME}")
+           set_target_properties(dolphin_libretro
+                   PROPERTIES
+                   LIBRARY_OUTPUT_DIRECTORY
+                   "${distribution_DIR}/core_${CFG_MODULE_NAME}/${CFG_BUILD_TYPE}/${ANDROID_ABI}")
+         endif()
+
 	endif()
 endif()
