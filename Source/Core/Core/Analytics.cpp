@@ -264,9 +264,15 @@ void DolphinAnalytics::MakeBaseBuilder()
   }
 #elif defined(ANDROID)
   builder.AddData("os-type", "android");
-  builder.AddData("android-manufacturer", s_get_val_func("DEVICE_MANUFACTURER"));
-  builder.AddData("android-model", s_get_val_func("DEVICE_MODEL"));
-  builder.AddData("android-version", s_get_val_func("DEVICE_OS"));
+  #ifdef PORTANDROID
+    builder.AddData("android-manufacturer", "UNKNOWN");
+    builder.AddData("android-model", "UNKNOWN");
+    builder.AddData("android-version", "UNKNOWN");
+  #else
+    builder.AddData("android-manufacturer", s_get_val_func("DEVICE_MANUFACTURER"));
+    builder.AddData("android-model", s_get_val_func("DEVICE_MODEL"));
+    builder.AddData("android-version", s_get_val_func("DEVICE_OS"));
+  #endif
 #elif defined(__APPLE__)
   builder.AddData("os-type", "osx");
 
